@@ -4,6 +4,9 @@ import PrimaryButton from "../components/primary-button";
 import abi from "../utils/Keyboards.json";
 import { ethers } from "ethers";
 import Keyboard from "../components/keyboard";
+import TipButton from "../components/tip-button";
+import addressesEqual from "../utils/addressesEqual";
+import { UserCircleIcon } from "@heroicons/react/solid";
 
 export default function Home() {
   const [ethereum, setEthereum] = useState(undefined);
@@ -12,7 +15,7 @@ export default function Home() {
   const [newKeyboard, setNewKeyboard] = useState("");
   const [keyboardsLoading, setKeyboardsLoading] = useState(false);
 
-  const contractAddress = "0xAB59A1a8f3cC15da815C25c2E0d087fB13d69f73";
+  const contractAddress = "0xd37789948ECe1c8B4021A3bf44b9812cf809711b";
   const contractABI = abi.abi;
 
   const handleAccounts = (accounts) => {
@@ -116,8 +119,17 @@ export default function Home() {
           Create a Keyboard!
         </PrimaryButton>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2">
-          {keyboards.map(([kind, isPBT, filter], i) => (
-            <Keyboard key={i} kind={kind} isPBT={isPBT} filter={filter} />
+          {keyboards.map(([kind, isPBT, filter, owner], i) => (
+            <div key={i} className="relative">
+              <Keyboard kind={kind} isPBT={isPBT} filter={filter} />
+              <span className="absolute top-1 right-6">
+                {addressesEqual(owner, connectedAccount) ? (
+                  <UserCircleIcon className="h-5 w-5 text-indigo-100" />
+                ) : (
+                  <TipButton ethereum={ethereum} index={i} />
+                )}
+              </span>
+            </div>
           ))}
         </div>
       </div>
