@@ -6,54 +6,25 @@ import Keyboard from "../components/keyboard";
 import abi from "../utils/Keyboards.json";
 
 export default function Create() {
-  const [ethereum, setEthereum] = useState(undefined);
-  const [connectedAccount, setConnectedAccount] = useState(undefined);
+  const { ethereum, connectedAccount, connectAccount } = useMetaMaskAccount();
 
   const [keyboardKind, setKeyboardKind] = useState(0);
   const [isPBT, setIsPBT] = useState(false);
   const [filter, setFilter] = useState("");
   const [mining, setMining] = useState(false);
 
-  const contractAddress = "0xd37789948ECe1c8B4021A3bf44b9812cf809711b";
+  const keyboardsContract = getKeyboardsContract(ethereum);
+
+  const contractAddress = "0x2fdb3C8DEa21a5dB79ecEb6B6C394ab5D5d92088";
   const contractABI = abi.abi;
-
-  const handleAccounts = (accounts) => {
-    if (accounts.length > 0) {
-      const account = accounts[0];
-      console.log("We have an authorized account: ", account);
-      setConnectedAccount(account);
-    } else {
-      console.log("No authorized accounts yet");
-    }
-  };
-
-  const getConnectedAccount = async () => {
-    if (window.ethereum) {
-      setEthereum(window.ethereum);
-    }
-
-    if (ethereum) {
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      handleAccounts(accounts);
-    }
-  };
-  useEffect(() => getConnectedAccount(), []);
-
-  const connectAccount = async () => {
-    if (!ethereum) {
-      alert("MetaMask is required to connect an account");
-      return;
-    }
-
-    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-    handleAccounts(accounts);
-  };
 
   const submitCreate = async (e) => {
     e.preventDefault();
 
-    if (!ethereum) {
-      console.error("Ethereum object is required to create a keyboard");
+    if (!keyboardsContract) {
+      console.error(
+        "KeyboardsContract object is required to create a keyboard"
+      );
       return;
     }
 
