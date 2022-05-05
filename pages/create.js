@@ -1,8 +1,10 @@
-import { ethers } from "ethers";
+import { useState } from "react";
 import Router from "next/router";
-import { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { useMetaMaskAccount } from "../components/meta-mask-account-provider";
 import PrimaryButton from "../components/primary-button";
 import Keyboard from "../components/keyboard";
+import getKeyboardsContract from "../utils/getKeyboardsContract";
 import abi from "../utils/Keyboards.json";
 
 export default function Create() {
@@ -15,7 +17,7 @@ export default function Create() {
 
   const keyboardsContract = getKeyboardsContract(ethereum);
 
-  const contractAddress = "0x2fdb3C8DEa21a5dB79ecEb6B6C394ab5D5d92088";
+  const contractAddress = "0x7D0a1F9d1DFDcBA4e9e21ED5698C3F3a7Cfb1FBA";
   const contractABI = abi.abi;
 
   const submitCreate = async (e) => {

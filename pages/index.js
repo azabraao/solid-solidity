@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import PrimaryButton from "../components/primary-button";
 import { toast } from "react-hot-toast";
 
-import abi from "../utils/Keyboards.json";
 import { ethers } from "ethers";
 import Keyboard from "../components/keyboard";
 import TipButton from "../components/tip-button";
@@ -15,13 +14,9 @@ export default function Home() {
   const { ethereum, connectedAccount, connectAccount } = useMetaMaskAccount();
 
   const [keyboards, setKeyboards] = useState([]);
-  const [newKeyboard, setNewKeyboard] = useState("");
   const [keyboardsLoading, setKeyboardsLoading] = useState(false);
 
   const keyboardsContract = getKeyboardsContract(ethereum);
-
-  const contractAddress = "0x2fdb3C8DEa21a5dB79ecEb6B6C394ab5D5d92088";
-  const contractABI = abi.abi;
 
   const getKeyboards = async () => {
     if (keyboardsContract && connectedAccount) {
